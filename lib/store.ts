@@ -65,10 +65,36 @@ interface ThemeState {
   setTheme: (theme: 'light' | 'dark') => void
 }
 
+// Helper function to get initial theme
+const getInitialTheme = (): 'light' | 'dark' => {
+  // For SSR, default to light
+  if (typeof window === 'undefined') return 'light';
+  
+  try {
+    // Check localStorage first
+    const storedTheme = localStorage.getItem('theme-storage');
+    if (storedTheme) {
+      const parsed = JSON.parse(storedTheme);
+      if (parsed.state && parsed.state.theme) {
+        return parsed.state.theme;
+      }
+    }
+    
+    // Then check system preference
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+  } catch (e) {
+    console.error('Error getting initial theme:', e);
+  }
+  
+  return 'light'; // Default to light
+};
+
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
-      theme: 'light',
+      theme: getInitialTheme(),
       toggleTheme: () => set((state) => ({ 
         theme: state.theme === 'light' ? 'dark' : 'light' 
       })),

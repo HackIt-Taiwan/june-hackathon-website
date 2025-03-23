@@ -26,10 +26,20 @@ export function ChatMessage({ message, index }: ChatMessageProps) {
       )}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: index * 0.1 }}
+      transition={{ duration: 0.3, delay: index * 0.05 }}
     >
-      <div className="flex gap-3 max-w-5xl mx-auto">
-        <div className="flex-shrink-0 pt-0.5">
+      <motion.div 
+        className="flex gap-3 max-w-5xl mx-auto"
+        initial={{ scale: 0.95 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 0.2, delay: index * 0.05 + 0.1 }}
+      >
+        <motion.div 
+          className="flex-shrink-0 pt-0.5"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, delay: index * 0.05 + 0.15 }}
+        >
           {isUser ? (
             <Avatar size="sm">
               <AvatarFallback>U</AvatarFallback>
@@ -41,8 +51,13 @@ export function ChatMessage({ message, index }: ChatMessageProps) {
               </div>
             </Avatar>
           )}
-        </div>
-        <div className="flex-1 space-y-1.5">
+        </motion.div>
+        <motion.div 
+          className="flex-1 space-y-1.5"
+          initial={{ opacity: 0, x: isUser ? 10 : -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, delay: index * 0.05 + 0.2 }}
+        >
           <div className="flex items-center gap-2">
             <span className="font-semibold text-sm">
               {isUser ? 'You' : 'Astral Assistant'}
@@ -57,8 +72,8 @@ export function ChatMessage({ message, index }: ChatMessageProps) {
           <div className="prose prose-sm max-w-none">
             <p>{message.content}</p>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </motion.div>
   )
 } 

@@ -3,7 +3,7 @@
 import React, { useRef, useEffect } from 'react'
 import { useChatStore } from '@/lib/store'
 import { ChatMessage } from './chat-message'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export function ChatMessages() {
   const { messages } = useChatStore()
@@ -24,9 +24,11 @@ export function ChatMessages() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      {messages.map((message, index) => (
-        <ChatMessage key={message.id} message={message} index={index} />
-      ))}
+      <AnimatePresence>
+        {messages.map((message, index) => (
+          <ChatMessage key={message.id} message={message} index={index} />
+        ))}
+      </AnimatePresence>
       <div ref={messagesEndRef} />
     </motion.div>
   )

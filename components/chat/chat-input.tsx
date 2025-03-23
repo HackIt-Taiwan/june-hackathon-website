@@ -46,11 +46,19 @@ export function ChatInput() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.2 }}
     >
-      <form 
+      <motion.form 
         onSubmit={handleSubmit}
         className="flex flex-col gap-3 max-w-5xl mx-auto"
+        initial={{ scale: 0.98 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 0.2, delay: 0.3 }}
       >
-        <div className="relative flex items-end">
+        <motion.div 
+          className="relative flex items-end"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.4 }}
+        >
           <Textarea
             ref={textareaRef}
             placeholder="Type your message..."
@@ -64,29 +72,35 @@ export function ChatInput() {
             }}
             className="min-h-[60px] max-h-[200px] pr-14"
           />
-          <Button
-            type="submit"
-            size="sm"
-            disabled={!input.trim() || isLoading}
-            className="absolute bottom-2 right-2 w-10 h-10 p-0 rounded-full"
+          <motion.div 
+            whileHover={{ scale: 1.05 }} 
+            whileTap={{ scale: 0.95 }}
+            className="absolute bottom-2 right-2"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-5 h-5"
+            <Button
+              type="submit"
+              size="sm"
+              disabled={!input.trim() || isLoading}
+              className="w-10 h-10 p-0 rounded-full"
             >
-              <path d="M22 2L11 13" />
-              <path d="M22 2L15 22L11 13L2 9L22 2Z" />
-            </svg>
-            <span className="sr-only">Send</span>
-          </Button>
-        </div>
-      </form>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-5 h-5"
+              >
+                <path d="M22 2L11 13" />
+                <path d="M22 2L15 22L11 13L2 9L22 2Z" />
+              </svg>
+              <span className="sr-only">Send</span>
+            </Button>
+          </motion.div>
+        </motion.div>
+      </motion.form>
     </motion.div>
   )
 } 

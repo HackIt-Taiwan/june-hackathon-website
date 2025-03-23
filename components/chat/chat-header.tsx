@@ -1,11 +1,11 @@
 "use client"
 
 import React from 'react'
-import { motion } from 'framer-motion'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { useSidebarStore } from '@/lib/store'
 import { Button } from '@/components/ui/button'
 import { LucideMenu } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 export function ChatHeader() {
   const { toggleSidebar } = useSidebarStore()
@@ -18,12 +18,24 @@ export function ChatHeader() {
       transition={{ duration: 0.3 }}
     >
       <div className="flex items-center gap-2">
-        <div className="relative h-8 w-8">
+        <motion.div 
+          className="relative h-8 w-8"
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+        >
           <div className="absolute inset-0 flex items-center justify-center rounded-full bg-primary text-primary-foreground">
             <span className="text-xl font-semibold">A</span>
           </div>
-        </div>
-        <h1 className="text-xl font-semibold tracking-tight">Astral Chat</h1>
+        </motion.div>
+        <motion.h1 
+          className="text-xl font-semibold tracking-tight"
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
+          Astral Chat
+        </motion.h1>
       </div>
       
       <div className="flex items-center gap-2">
@@ -33,7 +45,12 @@ export function ChatHeader() {
         </div>
         
         {/* Mobile menu button - only show on small screens */}
-        <div className="block md:hidden">
+        <motion.div 
+          className="block md:hidden"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+        >
           <Button
             variant="ghost"
             size="sm"
@@ -43,7 +60,7 @@ export function ChatHeader() {
           >
             <LucideMenu className="h-5 w-5" />
           </Button>
-        </div>
+        </motion.div>
       </div>
     </motion.header>
   )
