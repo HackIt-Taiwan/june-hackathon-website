@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSidebarStore, useThemeStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 export function Sidebar() {
   const { isOpen, toggleSidebar, setSidebarOpen } = useSidebarStore()
   const { theme, toggleTheme } = useThemeStore()
+  const [mounted, setMounted] = useState(false)
   
   // Close sidebar on wider screens
   useEffect(() => {
@@ -23,6 +24,55 @@ export function Sidebar() {
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [isOpen, setSidebarOpen])
+  
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+  
+  // Static version for server-side rendering
+  if (!mounted) {
+    return (
+      <>
+        {isOpen && (
+          <>
+            <div
+              className="fixed inset-0 bg-black/30 z-40 md:hidden"
+              onClick={() => setSidebarOpen(false)}
+            />
+            <div
+              className="fixed top-0 left-0 bottom-0 w-[280px] bg-background border-r border-border z-50 md:hidden"
+            >
+              <div className="flex flex-col h-full">
+                <div className="flex items-center justify-between p-4 border-b border-border">
+                  <h2 className="text-lg font-medium">Astral Chat</h2>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                    onClick={() => setSidebarOpen(false)}
+                  >
+                    <LucideX className="h-4 w-4" />
+                    <span className="sr-only">Close</span>
+                  </Button>
+                </div>
+                <div className="flex-1 overflow-auto p-4">
+                  <SidebarContent showThemeToggle={true} />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+        <div className="hidden md:block md:fixed md:inset-y-0 md:left-0 md:w-[280px] md:border-r md:border-border md:bg-background z-10">
+          <div className="p-4 border-b border-border">
+            <h2 className="text-lg font-medium">Astral Chat</h2>
+          </div>
+          <div className="flex-1 overflow-auto p-4 h-[calc(100vh-57px)]">
+            <SidebarContent showThemeToggle={false} />
+          </div>
+        </div>
+      </>
+    )
+  }
   
   // Sidebar for mobile (slide overlay)
   const mobileSidebar = (
@@ -114,7 +164,45 @@ export function Sidebar() {
 
 function SidebarContent({ showThemeToggle }: { showThemeToggle: boolean }) {
   const { theme, toggleTheme } = useThemeStore()
+  const [mounted, setMounted] = useState(false)
   
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+  
+  // Static version for server-side rendering
+  if (!mounted) {
+    return (
+      <div className="space-y-6">
+        <div className="space-y-1">
+          <h3 className="text-sm font-medium">Recent Chats</h3>
+          <ul className="space-y-1">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <li key={i}>
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start text-sm font-normal"
+                >
+                  Chat {i + 1}
+                </Button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        
+        <div className="space-y-1">
+          <h3 className="text-sm font-medium">Settings</h3>
+          {showThemeToggle && (
+            <div className="pt-1">
+              <ThemeToggle variant="button" />
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+  
+  // Animated version for client-side
   return (
     <div className="space-y-6">
       <div className="space-y-1">
